@@ -1,0 +1,12 @@
+version: '3'
+services:
+  develop:
+    build: ./
+    user: root
+    # コンテナ内のdirecotry と同期させる　host の directory path
+    volumes:
+      - ./:/root/work
+    working_dir: /root/work
+    ports:
+      - "8888:8888"
+    command: jupyter lab --ip=0.0.0.0 --allow-root --NotebookApp.token='' --port=8888
