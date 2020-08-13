@@ -1,4 +1,5 @@
 # multi-stageは3系から
+# poetry config virturalenv.config falseにしてるからpoetry run が必要ない？
 # FROM python:3.7-slim as production
 # FROM ubuntu:18.04
 FROM python:3.7-slim
@@ -45,14 +46,17 @@ RUN apt-get update && \
 # ============= 開発に必要な python モジュール =============
 # tomlに記載のあるパッケージのインストール
 RUN pip3 install poetry \
+    # language server
+    "python-language-server[all]" \
     && poetry config virtualenvs.create false \
     && poetry install
+    
 
 # ============= ここから jupyter の設定 ================
 # --dev で開発用パッケージとして依存関係を固定する
-RUN poetry add --dev\
-    jupyter \
-    jupyterlab \
+RUN poetry add --dev jupyter \
+    # jupyterlab \
+    nodejs \
     jupytext \
     jupyter-contrib-nbextensions \
     jupyter-nbextensions-configurator \
@@ -67,29 +71,30 @@ c.NotebookApp.open_browser = False\n\
 " >> ${HOME}/.jupyter/jupyter_notebook_config.py
 
 # jupyter notebook extension
-RUN jupyter contrib nbextension install --user && \
-    jupyter nbextensions_configurator enable --user && \
+RUN poetry run jupyter contrib nbextension install --user && \
+    poetry run jupyter nbextensions_configurator enable --user && \
     # enable extensions what you want
-    jupyter nbextension enable select_keymap/main && \
-    jupyter nbextension enable highlight_selected_word/main && \
-    jupyter nbextension enable toggle_all_line_numbers/main && \
-    jupyter nbextension enable varInspector/main && \
-    jupyter nbextension enable toc2/main && \
-    jupyter nbextension enable equation-numbering/main && \
-    jupyter nbextension enable execute_time/ExecuteTime && \
+    poetry run jupyter nbextension enable select_keymap/main && \
+    poetry run jupyter nbextension enable highlight_selected_word/main && \
+    poetry run jupyter nbextension enable toggle_all_line_numbers/main && \
+    poetry run jupyter nbextension enable varInspector/main && \
+    poetry run jupyter nbextension enable toc2/main && \
+    poetry run jupyter nbextension enable equation-numbering/main && \
+    poetry run jupyter nbextension enable execute_time/ExecuteTime && \
     echo Done
 
 # jupyter lab extension
-RUN jupyter labextension install @lckr/jupyterlab_variableinspector && \
-    jupyter labextension install @jupyterlab/toc && \
-    jupyter nbextension enable --py widgetsnbextension && \
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
-    # jupyter labextension install @z-m-k/jupyterlab_sublime && \
-    jupyter labextension install @ryantam626/jupyterlab_code_formatter && \
-    jupyter serverextension enable --py jupyterlab_code_formatter && \
-    jupyter labextension install jupyterlab-theme-solarized-dark \
-    # jupyter labextension install @hokyjack/jupyterlab-monokai-plus && \
-    echo Done
+RUN poetry run jupyter labextension install @lckr/jupyterlab_variableinspector && \
+    poetry run jupyter labextension install @jupyterlab/toc && \
+    poetry run jupyter nbextension enable --py widgetsnbextension && \
+    poetry run jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
+    # poetry run jupyter labextension install @z-m-k/jupyterlab_sublime && \
+    poetry run jupyter labextension install @ryantam626/jupyterlab_code_formatter && \
+    poetry run jupyter serverextension enable --py jupyterlab_code_formatter && \
+    poetry run jupyter labextension install jupyterlab-theme-solarized-dark && \
+    poetry run jupyter labextension install @krassowski/jupyterlab-lsp
+    # poetry run jupyter labextension install @hokyjack/jupyterlab-monokai-plus && \
+    # echo "Done2
 
 # default の formatter : brack
 RUN mkdir -p /root/.jupyter/lab/user-settings/@ryantam626/jupyterlab_code_formatter && echo '\
@@ -99,7 +104,7 @@ RUN mkdir -p /root/.jupyter/lab/user-settings/@ryantam626/jupyterlab_code_format
             "python": "black",\n\
         }\n\
     }\n\
-}\n\
+}\n\    
 \
 '>> /root/.jupyter/lab/user-settings/@ryantam626/jupyterlab_code_formatter/settings.jupyterlab-settings
 
