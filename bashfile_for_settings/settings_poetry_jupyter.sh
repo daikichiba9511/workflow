@@ -40,7 +40,8 @@ poetry run jupyter labextension install jupyterlab-theme-solarized-dark
 echo Done
 
 # language server
-pip3 install "python-language-server[all]"
+# detail -> https://github.com/krassowski/jupyterlab-lsp
+poetry add "python-language-server[all]"
 
 # default の formatter : brack
 mkdir -p ${PWD}/.venv/.jupyter/lab/user-settings/@ryantam626/jupyterlab_code_formatter
