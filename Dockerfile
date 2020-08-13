@@ -50,7 +50,7 @@ RUN pip3 install poetry \
     "python-language-server[all]" \
     && poetry config virtualenvs.create false \
     && poetry install
-    
+
 
 # ============= ここから jupyter の設定 ================
 # --dev で開発用パッケージとして依存関係を固定する
