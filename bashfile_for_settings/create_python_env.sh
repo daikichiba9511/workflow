@@ -22,7 +22,8 @@ source ~/.zshrc
 # ============ python ==============
 # python の install
 echo "===== python install start ====="
-pyenv install 3.7.6
+pyenv install 3.7.6 
+pyenv install 3.8.4
 # 変更の適用
 source ~/.zshrc
 echo "===== python install finish ====="
