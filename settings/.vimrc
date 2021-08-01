@@ -27,7 +27,7 @@ set showmatch
 " syntax highlight
 " ==============================
 syntax on
-colorscheme monokai
+colorscheme hybrid
 
 " ==============================
 " コマンドラインの補完
@@ -185,8 +185,16 @@ Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
 
 
+Plug 'prabirshrestha/vim-lsp'
+
+Plug 'mattn/vim-lsp-settings'
+
+Plug 'prabirshrestha/asyncomplete.vim'
+
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
 let g:deoplete#enable_at_startup = 1
+
 
 "ここまでdeoplete本体
 
@@ -203,5 +211,25 @@ Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'Shougo/neco-vim'
 
 
-
 call plug#end()
+
+
+let g:lsp_diagnostics_echo_cursor = 1
+
+let g:lsp_settings = {
+\    'pyls-all': {
+\      'workspace_config': {
+\         'pyls': {
+\             'configurationSources': ['flake8']
+\          }
+\      }
+\    },
+\}
+
+
+autocmd BufWritePre <buffer> LspDocumentFormatSync
+
+
+inoremap <silent> jj <ESC>
+
+Plug 'JuliaLang/julia-vim'
