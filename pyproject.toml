@@ -16,7 +16,7 @@ japanize-matplotlib = "*"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 scipy = "^1.5.1"
-jupyterlab = "^2.1.5"
+jupyterlab = "^3.6.7"
 
 [build-system]
 requires = ["poetry>=0.12"]
